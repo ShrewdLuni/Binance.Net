@@ -243,22 +243,5 @@ namespace Binance.Net.Clients.GeneralApi
         #endregion
 
         #endregion
-
-        #region Customize Margin Call (FULLY RETIRED)
-        /// <inheritdoc />
-        public async Task<WebCallResult<BinanceQueryRecords<BinanceCryptoLoanMarginCallResult>>> CustomizeMarginCallAsync(decimal marginCall, string? orderId = null, string? collateralAsset = null, long? receiveWindow = null, CancellationToken ct = default)
-        {
-            var parameters = new ParameterCollection()
-            {
-                { "marginCall", marginCall.ToString(CultureInfo.InvariantCulture) }
-            };
-            parameters.AddOptionalParameter("orderId", orderId);
-            parameters.AddOptionalParameter("collateralCoin", collateralAsset);
-            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
-
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "sapi/v1/loan/customize/margin_call", BinanceExchange.RateLimiter.SpotRestUid, 6000, true);
-            return await _baseClient.SendAsync<BinanceQueryRecords<BinanceCryptoLoanMarginCallResult>>(request, parameters, ct).ConfigureAwait(false);
-        }
-        #endregion
     }
 }
